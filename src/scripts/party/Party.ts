@@ -179,6 +179,14 @@ class Party implements Feature {
         }
     }
 
+    public getPokemonByName(name: string) {
+        for (let i = 0; i < this.caughtPokemon.length; i++) {
+            if (this.caughtPokemon[i].name === name) {
+                return this.caughtPokemon[i];
+            }
+        }
+    }
+
     alreadyCaughtPokemonByName(name: PokemonNameType, shiny = false) {
         return this.alreadyCaughtPokemon(PokemonHelper.getPokemonByName(name).id, shiny);
     }

@@ -15,8 +15,9 @@ import {
     DAY,
 } from '../GameConstants';
 import HotkeySetting from './HotkeySetting';
-import BreedingFilters from './BreedingFilters';
-import ProteinFilters from './ProteinFilters';
+import BreedingFilters from './filters/BreedingFilters';
+import ProteinFilters from './filters/ProteinFilters';
+import SaveableFilter from './filters/SaveableFilter';
 
 export default Settings;
 
@@ -177,24 +178,15 @@ Settings.add(new BooleanSetting('proteinSortDirection', 'reverse', false));
 Settings.add(new BooleanSetting('proteinHideMaxedPokemon', 'Hide Pokémon with max protein', false));
 Settings.add(new BooleanSetting('proteinHideShinyPokemon', 'Hide shiny Pokémon', false));
 
-// Protein filters
-Object.keys(ProteinFilters).forEach((key) => {
-    // One-off because search isn't stored in settings
-    if (key === 'search') {
-        return;
-    }
-    const filter = ProteinFilters[key];
-    Settings.add(new Setting<string>(filter.optionName, filter.displayName, filter.options || [], filter.value().toString()));
-});
-
-// Breeding Filters
-Object.keys(BreedingFilters).forEach((key) => {
-    // One-off because search isn't stored in settings
-    if (key === 'search') {
-        return;
-    }
-    const filter = BreedingFilters[key];
-    Settings.add(new Setting<string>(filter.optionName, filter.displayName, filter.options || [], filter.value().toString()));
+// Set up filters
+[ProteinFilters, BreedingFilters].forEach((filterMap) => {
+    Object.values(filterMap).forEach((filter) => {
+        // If it's a local filter that has no associated setting, skip
+        if (!SaveableFilter.isSaveableFilter(filter)) {
+            return;
+        }
+        Settings.add(new Setting<string>(filter.settingName, filter.label, filter.settingOptions, filter.selectedValue().toString()));
+    });
 });
 
 Settings.add(new Setting<string>('breedingDisplayFilter', 'breedingDisplayFilter',

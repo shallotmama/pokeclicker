@@ -1,4 +1,4 @@
-/// <reference path="../../declarations/settings/BreedingFilters.d.ts" />
+/// <reference path="../../declarations/settings/filters/BreedingFilters.d.ts" />
 /// <reference path="../../declarations/GameHelper.d.ts" />
 /// <reference path="../../declarations/DataStore/common/Feature.d.ts" />
 /// <reference path="../../declarations/breeding/EggType.d.ts" />
@@ -34,11 +34,11 @@ class Breeding implements Feature {
         this._eggList.forEach((egg) => {
             egg.extend({deferred: true});
         });
-        BreedingFilters.category.value(Settings.getSetting('breedingCategoryFilter').value);
-        BreedingFilters.region.value(Settings.getSetting('breedingRegionFilter').value);
-        BreedingFilters.type1.value(Settings.getSetting('breedingTypeFilter1').value);
-        BreedingFilters.type2.value(Settings.getSetting('breedingTypeFilter2').value);
-        BreedingFilters.shinyStatus.value(Settings.getSetting('breedingShinyFilter').value);
+        BreedingFilters.category.selectedValue(Settings.getSetting('breedingCategoryFilter').value);
+        BreedingFilters.region.selectedValue(Settings.getSetting('breedingRegionFilter').value);
+        BreedingFilters.type1.selectedValue(Settings.getSetting('breedingTypeFilter1').value);
+        BreedingFilters.type2.selectedValue(Settings.getSetting('breedingTypeFilter2').value);
+        BreedingFilters.shinyStatus.selectedValue(Settings.getSetting('breedingShinyFilter').value);
         BreedingController.displayValue(Settings.getSetting('breedingDisplayFilter').value);
     }
 

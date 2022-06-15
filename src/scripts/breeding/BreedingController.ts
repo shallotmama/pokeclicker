@@ -1,4 +1,4 @@
-/// <reference path="../../declarations/settings/BreedingFilters.d.ts" />
+/// <reference path="../../declarations/settings/filters/BreedingFilters.d.ts" />
 /// <reference path="../../declarations/enums/CaughtStatus.d.ts"/>
 /// <reference path="../../declarations/breeding/EggType.d.ts" />
 
@@ -142,34 +142,21 @@ class BreedingController {
                 return false;
             }
 
-            if (!BreedingFilters.search.value().test(partyPokemon.name)) {
-                return false;
-            }
-
-            // Check based on category
-            if (BreedingFilters.category.value() >= 0) {
-                if (partyPokemon.category !== BreedingFilters.category.value()) {
-                    return false;
+            // eslint-disable-next-line prefer-const
+            for (let f of Object.values(BreedingFilters)) {
+                // Special logic concerning dual-types, found below
+                if (RegExp('Type').test(f.label)) {
+                    continue;
                 }
-            }
 
-            // Check based on shiny status
-            if (BreedingFilters.shinyStatus.value() >= 0) {
-                if (+partyPokemon.shiny !== BreedingFilters.shinyStatus.value()) {
-                    return false;
-                }
-            }
-
-            // Check based on native region
-            if (BreedingFilters.region.value() > -2) {
-                if (PokemonHelper.calcNativeRegion(partyPokemon.name) !== BreedingFilters.region.value()) {
+                if (!f.include(partyPokemon)) {
                     return false;
                 }
             }
 
             // Check if either of the types match
-            const type1: (PokemonType | null) = BreedingFilters.type1.value() > -2 ? BreedingFilters.type1.value() : null;
-            const type2: (PokemonType | null) = BreedingFilters.type2.value() > -2 ? BreedingFilters.type2.value() : null;
+            const type1: (PokemonType | null) = BreedingFilters.type1.selectedValue() > -2 ? BreedingFilters.type1.selectedValue() : null;
+            const type2: (PokemonType | null) = BreedingFilters.type2.selectedValue() > -2 ? BreedingFilters.type2.selectedValue() : null;
             if (type1 !== null || type2 !== null) {
                 const { type: types } = pokemonMap[partyPokemon.name];
                 if ([type1, type2].includes(PokemonType.None)) {

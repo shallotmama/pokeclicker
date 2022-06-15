@@ -1,4 +1,4 @@
-/// <reference path="../../declarations/settings/ProteinFilters.d.ts" />
+/// <reference path="../../declarations/settings/filters/ProteinFilters.d.ts" />
 
 enum PartyPokemonSaveKeys {
     attackBonusPercent = 0,
